@@ -1,0 +1,11 @@
+title new note spa
+
+browser->browser: Submit form
+
+note over browser:
+browser adds new note to the list
+of notes and renders them to display
+end note
+
+browser->server: HTTP POST https://fullstack-exampleapp.herokuapp.com/new_note_spa
+server-->browser: Status code 201 created, {"message":"note created"}
