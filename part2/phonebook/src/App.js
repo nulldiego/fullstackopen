@@ -1,4 +1,5 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
 
 const Filter = ({ value, onChange }) => (
   <div>
@@ -21,27 +22,29 @@ const PersonForm = ({ onSubmit, valueName, valueNumber, onChangeName, onChangeNu
 )
 
 const Person = ({ name, number }) => (
-  <div key={name}>
+  <div>
     {name} {number}
   </div>
 )
 
 const Persons = ({ persons }) => (
   persons.map(person =>
-    <Person name={person.name} number={person.number} />
+    <Person key={person.name} name={person.name} number={person.number} />
   )
 )
 
 const App = () => {
-  const [ persons, setPersons ] = useState([
-    { name: 'Arto Hellas', number: '040-123456' },
-    { name: 'Ada Lovelace', number: '39-44-5323523' },
-    { name: 'Dan Abramov', number: '12-43-234345' },
-    { name: 'Mary Poppendieck', number: '39-23-6423122' }
-  ]) 
+  const [ persons, setPersons ] = useState([]) 
   const [ newName, setNewName ] = useState('')
   const [ newNumber, setNewNumber ] = useState('')
   const [ searchFilter, setSearchFilter ] = useState('')
+
+  useEffect(() => {
+    axios
+      .get('http://localhost:3001/persons').then(response => {
+        setPersons(response.data)
+      })
+  }, [])
 
   const personsToShow = persons.filter(person => person.name.toUpperCase().includes(searchFilter.toUpperCase()))
 
